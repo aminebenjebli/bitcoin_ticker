@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bitcoin_ticker/coin_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,31 +12,44 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
-  // This function will be used to get the dropdown items when user run on Android
-  List<DropdownMenuItem<String>> getDropdownItems() {
-    List<DropdownMenuItem<String>> items = [];
-    // This function will be used to get the dropdown items
-    // from the CoinData class.
+
+  DropdownButton<String> androidDropdown() {
+    List<DropdownMenuItem<String>> dropDownItems = [];
+
     for (String currency in currenciesList) {
       // Add the currency to the dropdown items
       DropdownMenuItem<String> item = DropdownMenuItem(
         value: currency,
         child: Text(currency),
       );
-      items.add(item);
+      dropDownItems.add(item);
     }
-    return items;
+    return DropdownButton<String>(
+      value: selectedCurrency,
+      icon: const Icon(Icons.arrow_drop_down),
+      iconSize: 24,
+      elevation: 16,
+      items: dropDownItems,
+      onChanged: (value) {
+        setState(() {
+          selectedCurrency = value!;
+        });
+      },
+    );
   }
-  // and the picker items when user run on iOS.
-  List<Text> getPickerItems() {
+
+  CupertinoPicker iosPicker() {
     List<Text> pickerItems = [];
-    // This function will be used to get the dropdown items
-    // from the CoinData class.
     for (String currency in currenciesList) {
       // Add the currency to the dropdown items
       pickerItems.add(Text(currency));
     }
-    return pickerItems;
+    return CupertinoPicker(
+        itemExtent: 32.0,
+        onSelectedItemChanged: (selectedIndex) {
+          print(selectedIndex);
+        },
+        children: pickerItems);
   }
 
   @override
@@ -74,27 +88,10 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: const EdgeInsets.only(bottom: 30.0),
             color: const Color.fromARGB(255, 7, 80, 113),
-            child: CupertinoPicker(
-                itemExtent: 32.0,
-                onSelectedItemChanged: (selectedIndex) {
-                  print(selectedIndex);
-                },
-                children: getPickerItems()),
+            child: Platform.isAndroid ? androidDropdown() : iosPicker(),
           ),
         ],
       ),
     );
   }
 }
-// DropdownButton<String>(
-//               value: selectedCurrency,
-//               icon: const Icon(Icons.arrow_drop_down),
-//               iconSize: 24,
-//               elevation: 16,
-//               items: getDropdownItems(),
-//               onChanged: (value) {
-//                 setState(() {
-//                   selectedCurrency = value!;
-//                 });
-//               },
-//             ),
