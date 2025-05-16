@@ -1,3 +1,4 @@
+import 'package:bitcoin_ticker/coin_data.dart';
 import 'package:flutter/material.dart';
 
 class PriceScreen extends StatefulWidget {
@@ -9,6 +10,21 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
+  List<DropdownMenuItem<String>> getDropdownItems() {
+    List<DropdownMenuItem<String>> items = [];
+    // This function will be used to get the dropdown items
+    // from the CoinData class.
+    for (String currency in currenciesList) {
+      // Add the currency to the dropdown items
+      DropdownMenuItem<String> item = DropdownMenuItem(
+        value: currency,
+        child: Text(currency),
+      );
+      items.add(item);
+    }
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +38,7 @@ class _PriceScreenState extends State<PriceScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
             child: Card(
-              color: Colors.lightBlueAccent,
+              color: const Color.fromARGB(255, 7, 80, 113),
               elevation: 5.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -44,26 +60,13 @@ class _PriceScreenState extends State<PriceScreen> {
             height: 150.0,
             alignment: Alignment.center,
             padding: const EdgeInsets.only(bottom: 30.0),
-            color: Colors.lightBlue,
+            color: const Color.fromARGB(255, 7, 80, 113),
             child: DropdownButton<String>(
               value: selectedCurrency,
               icon: const Icon(Icons.arrow_drop_down),
               iconSize: 24,
               elevation: 16,
-              items: const [
-                DropdownMenuItem(
-                  value: 'USD',
-                  child: Text('USD'),
-                ),
-                DropdownMenuItem(
-                  value: 'EUR',
-                  child: Text('EUR'),
-                ),
-                DropdownMenuItem(
-                  value: 'GBP',
-                  child: Text('GBP'),
-                ),
-              ],
+              items: getDropdownItems(),
               onChanged: (value) {
                 setState(() {
                   selectedCurrency = value!;

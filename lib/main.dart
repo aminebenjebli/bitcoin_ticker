@@ -12,8 +12,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
-          primaryColor: Colors.lightBlue,
-          scaffoldBackgroundColor: Colors.white),
+        primaryColor: const Color.fromARGB(255, 7, 80, 113),
+      ),
       home: const PriceScreen(),
     );
   }
